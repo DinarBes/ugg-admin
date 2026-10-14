@@ -66,7 +66,15 @@ class OrderDetailViewModel(
 
     fun onAdvance() = perform { useCase.advance(it) }
 
-    fun onCancel() = perform { useCase.cancel(it) }
+    fun onCancel() = perform {
+        useCase.cancel(it)
+        state.update { current -> current.copy(isCancelled = true) }
+    }
+
+    /** The screen has left for the list. */
+    fun onCancelHandled() {
+        state.update { it.copy(isCancelled = false) }
+    }
 
     fun onSave() {
         val id = orderId ?: return

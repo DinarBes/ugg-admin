@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ugg.admin.kit.core.presentation.external.icons.UggIcons
 import com.ugg.admin.kit.core.presentation.external.theme.UggTheme
@@ -75,7 +76,13 @@ fun UggButton(
                 )
             }
 
-            Text(text = text, style = UggTheme.typography.button, color = content, maxLines = 1)
+            Text(
+                text = text,
+                style = UggTheme.typography.button,
+                color = content,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
 
             if (showArrow) {
                 Icon(

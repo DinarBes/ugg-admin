@@ -12,6 +12,8 @@ data class OrderDetailState(
     /** A stage change or a cancellation is on its way. */
     val isUpdating: Boolean = false,
     val isSaving: Boolean = false,
+    /** The order was just cancelled from this card: the screen closes it and returns to the list. */
+    val isCancelled: Boolean = false,
     val error: Throwable? = null,
 ) {
     val hasChanges: Boolean

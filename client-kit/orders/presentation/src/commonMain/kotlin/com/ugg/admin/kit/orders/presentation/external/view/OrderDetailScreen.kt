@@ -14,7 +14,8 @@ import com.ugg.admin.kit.orders.presentation.internal.view.OrderDetailView
 import org.kodein.di.compose.viewmodel.rememberViewModel
 
 /**
- * One order: stage, customer, items, deadline and the master's note. Cancelling asks first.
+ * One order: stage, customer, items, deadline and the master's note. Cancelling asks first and
+ * then returns to the list ([onBack]).
  *
  * @param onAddPhoto «+ Добавить» in «Фото процесса»; uploading needs Firebase Storage, so the host decides.
  */
@@ -35,6 +36,14 @@ fun OrderDetailScreen(
         if (!isStarted) {
             isStarted = true
             viewModel.load(orderId)
+        }
+    }
+
+    // Cancelled from here: nothing is left to do on the card, so back to the orders list.
+    LaunchedEffect(state.isCancelled) {
+        if (state.isCancelled) {
+            viewModel.onCancelHandled()
+            onBack()
         }
     }
 

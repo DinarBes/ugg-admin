@@ -89,6 +89,22 @@ class OrdersViewModelTest {
     }
 
     @Test
+    fun cancellingClosesTheCard() = runTest {
+        val detail = OrderDetailViewModel(useCase())
+
+        detail.load("a")
+        advanceUntilIdle()
+        detail.onCancel()
+        advanceUntilIdle()
+
+        assertEquals(OrderStatus.Cancelled, detail.state.value.order?.status)
+        assertTrue(detail.state.value.isCancelled)
+
+        detail.onCancelHandled()
+        assertFalse(detail.state.value.isCancelled)
+    }
+
+    @Test
     fun savingTheNoteClearsChanges() = runTest {
         val detail = OrderDetailViewModel(useCase())
 
