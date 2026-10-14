@@ -187,6 +187,11 @@ private fun ShadesSection(
     val colors = UggTheme.colors
 
     UggSection(title = "Цвета", trailing = "в наличии") {
+        Text(
+            text = "Выключенный цвет пропадает у клиентов из выбора — например, когда кончилась овчина этого оттенка",
+            style = UggTheme.typography.caption,
+            color = colors.contentSecondary,
+        )
         Column {
             shades.forEachIndexed { index, shade ->
                 if (index > 0) HorizontalDivider(thickness = 1.dp, color = colors.outline)
