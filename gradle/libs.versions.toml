@@ -4,6 +4,8 @@ kotlin-version = "2.3.20"
 kotlin-coroutines-version = "1.10.2"
 
 kotlinx-datetime-version = "0.7.1"
+
+firebase-bom-version = "34.19.0"
 kotlinx-serialization-version = "1.11.0"
 
 material3-version = "1.10.0-alpha05"
@@ -68,6 +70,10 @@ multiplatform-foundation-core = { group = "cloud.paybuddy", name = "multiplatfor
 multiplatform-foundation-network = { group = "cloud.paybuddy", name = "multiplatform-foundation-network", version.ref = "multiplatform-foundation-version" }
 multiplatform-foundation-keystore = { group = "cloud.paybuddy", name = "multiplatform-foundation-keystore", version.ref = "multiplatform-foundation-version" }
 multiplatform-foundation-serialization = { group = "cloud.paybuddy", name = "multiplatform-foundation-serialization", version.ref = "multiplatform-foundation-version" }
+
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom-version" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 
 [plugins]
 setup-multiplatform-app = { id = "setup-multiplatform-app" }

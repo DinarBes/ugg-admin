@@ -20,6 +20,8 @@ include(":androidApp")
 listOf(
     Module(":infrastructure:api-core", "infrastructure/api/core"),
     Module(":infrastructure:api-auth", "infrastructure/api/auth"),
+    Module(":infrastructure:firebase-auth", "infrastructure/firebase/auth"),
+    Module(":infrastructure:firebase-firestore", "infrastructure/firebase/firestore"),
     Module(":infrastructure:keystore-foundation", "infrastructure/keystore/foundation"),
     Module(":infrastructure:keystore-session", "infrastructure/keystore/session"),
 
@@ -42,6 +44,22 @@ listOf(
     Module(":client-kit:orders-data", "client-kit/orders/data"),
     Module(":client-kit:orders-domain", "client-kit/orders/domain"),
     Module(":client-kit:orders-presentation", "client-kit/orders/presentation"),
+
+    Module(":client-kit:catalog-data", "client-kit/catalog/data"),
+    Module(":client-kit:catalog-domain", "client-kit/catalog/domain"),
+    Module(":client-kit:catalog-presentation", "client-kit/catalog/presentation"),
+
+    Module(":client-kit:stores-data", "client-kit/stores/data"),
+    Module(":client-kit:stores-domain", "client-kit/stores/domain"),
+    Module(":client-kit:stores-presentation", "client-kit/stores/presentation"),
+
+    Module(":client-kit:clients-data", "client-kit/clients/data"),
+    Module(":client-kit:clients-domain", "client-kit/clients/domain"),
+    Module(":client-kit:clients-presentation", "client-kit/clients/presentation"),
+
+    Module(":client-kit:content-data", "client-kit/content/data"),
+    Module(":client-kit:content-domain", "client-kit/content/domain"),
+    Module(":client-kit:content-presentation", "client-kit/content/presentation"),
 ).forEach {
     include(it.name)
     project(it.name).projectDir = file(it.path)

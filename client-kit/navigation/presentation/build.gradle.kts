@@ -18,6 +18,14 @@ kotlin {
             implementation(projects.clientKit.authDomain)
             implementation(projects.clientKit.authPresentation)
 
+            implementation(projects.clientKit.catalogPresentation)
+            implementation(projects.clientKit.clientsPresentation)
+            implementation(projects.clientKit.contentDomain)
+            implementation(projects.clientKit.contentPresentation)
+
+            implementation(projects.clientKit.storesDomain)
+            implementation(projects.clientKit.storesPresentation)
+
             implementation(projects.clientKit.ordersDomain)
             implementation(projects.clientKit.ordersPresentation)
 

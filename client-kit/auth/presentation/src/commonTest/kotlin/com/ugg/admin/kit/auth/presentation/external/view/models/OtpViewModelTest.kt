@@ -1,7 +1,14 @@
 package com.ugg.admin.kit.auth.presentation.external.view.models
 
+import com.ugg.admin.kit.auth.domain.entities.PhoneChallenge
+import com.ugg.admin.kit.auth.domain.states.OtpState
 import com.ugg.admin.kit.auth.domain.useCases.AuthUseCase
-import com.ugg.admin.kit.auth.presentation.external.states.OtpState
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -9,13 +16,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OtpViewModelTest {
@@ -69,20 +69,39 @@ class OtpViewModelTest {
         assertEquals(SESSION_ID, useCase.sessionId)
     }
 
+    @Test
+    fun resendSwitchesToTheNewSession() = runTest {
+        val useCase = RecordingUseCase(newSessionId = "resent-session")
+        val vm = OtpViewModel(useCase)
+        vm.onStateChange(vm.state.value.copy(otp = "12"))
+
+        vm.resend("+79001234567")
+        advanceUntilIdle()
+
+        assertEquals("", vm.state.value.otp)
+        assertEquals(1, vm.state.value.resendCount)
+
+        vm.onStateChange(vm.state.value.copy(otp = "123456"))
+        vm.onSubmit(SESSION_ID)
+        advanceUntilIdle()
+
+        assertEquals("resent-session", useCase.sessionId)
+    }
+
     private class SuccessUseCase : AuthUseCase {
-        override suspend fun initiate(phone: String): String = SESSION_ID
+        override suspend fun initiate(phone: String): PhoneChallenge = PhoneChallenge.CodeSent(SESSION_ID)
         override suspend fun login(otp: String, sessionId: String) = Unit
     }
 
     private class FailureUseCase : AuthUseCase {
-        override suspend fun initiate(phone: String): String = SESSION_ID
+        override suspend fun initiate(phone: String): PhoneChallenge = PhoneChallenge.CodeSent(SESSION_ID)
         override suspend fun login(otp: String, sessionId: String) = throw Exception("Invalid OTP")
     }
 
-    private class RecordingUseCase : AuthUseCase {
+    private class RecordingUseCase(private val newSessionId: String = SESSION_ID) : AuthUseCase {
         var sessionId: String? = null
 
-        override suspend fun initiate(phone: String): String = SESSION_ID
+        override suspend fun initiate(phone: String): PhoneChallenge = PhoneChallenge.CodeSent(newSessionId)
         override suspend fun login(otp: String, sessionId: String) { this.sessionId = sessionId }
     }
 

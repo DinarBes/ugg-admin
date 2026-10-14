@@ -16,21 +16,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +36,7 @@ import com.ugg.admin.kit.core.data.formatting.toDayAndMonth
 import com.ugg.admin.kit.core.presentation.external.components.UggButton
 import com.ugg.admin.kit.core.presentation.external.components.UggButtonStyle
 import com.ugg.admin.kit.core.presentation.external.components.UggIconButton
+import com.ugg.admin.kit.core.presentation.external.components.UggSearchField
 import com.ugg.admin.kit.core.presentation.external.icons.UggIcons
 import com.ugg.admin.kit.core.presentation.external.theme.UggTheme
 import com.ugg.admin.kit.orders.domain.entities.Order
@@ -82,7 +77,13 @@ internal fun OrdersView(
 
         if (state.isSearching) {
             item(key = "search") {
-                SearchField(query = state.query, onQuery = onQuery, modifier = Modifier.padding(horizontal = horizontal))
+                UggSearchField(
+                    query = state.query,
+                    onQueryChange = onQuery,
+                    placeholder = "Номер, имя или телефон",
+                    autoFocus = true,
+                    modifier = Modifier.padding(horizontal = horizontal),
+                )
             }
         } else {
             item(key = "summary") {
@@ -157,38 +158,6 @@ private fun Header(
             contentDescription = if (isSearching) "Закрыть поиск" else "Поиск по заказам",
             onClick = onToggleSearch,
         )
-    }
-}
-
-@Composable
-private fun SearchField(query: String, onQuery: (String) -> Unit, modifier: Modifier = Modifier) {
-    val colors = UggTheme.colors
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) { focusRequester.requestFocus() }
-
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(colors.surfaceElevated, UggTheme.shapes.pill)
-            .border(1.dp, colors.outline, UggTheme.shapes.pill)
-            .padding(horizontal = UggTheme.spacing.m, vertical = 14.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(imageVector = UggIcons.Search, contentDescription = null, tint = colors.contentSecondary, modifier = Modifier.size(18.dp))
-        Box(modifier = Modifier.weight(1f)) {
-            if (query.isEmpty()) {
-                Text(text = "Номер, имя или телефон", style = UggTheme.typography.body, color = colors.contentSecondary)
-            }
-            BasicTextField(
-                value = query,
-                onValueChange = onQuery,
-                singleLine = true,
-                textStyle = UggTheme.typography.body.copy(color = colors.content),
-                cursorBrush = SolidColor(colors.content),
-                modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
-            )
-        }
     }
 }
 

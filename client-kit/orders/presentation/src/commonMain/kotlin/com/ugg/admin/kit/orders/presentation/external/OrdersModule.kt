@@ -1,6 +1,9 @@
 package com.ugg.admin.kit.orders.presentation.external
 
+import com.ugg.admin.infrastructure.api.core.TemplateCore
+import com.ugg.admin.kit.core.domain.AppEnvironment
 import com.ugg.admin.kit.orders.data.useCases.MockOrdersUseCase
+import com.ugg.admin.kit.orders.data.useCases.SharedOrdersUseCase
 import com.ugg.admin.kit.orders.domain.useCases.OrdersUseCase
 import com.ugg.admin.kit.orders.presentation.external.view.models.OrderDetailViewModel
 import com.ugg.admin.kit.orders.presentation.external.view.models.OrdersViewModel
@@ -8,7 +11,7 @@ import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.factory
 import org.kodein.di.instance
-import org.kodein.di.provider
+import org.kodein.di.on
 
 // One store for the whole app, so a stage changed on the order card shows up in the list. Kept out
 // of Kodein on purpose: a binding of the Mock type would also match OrdersUseCase.
@@ -24,9 +27,13 @@ val ordersModule: DI.Module
             OrderDetailViewModel(instance())
         }
 
-        bind<OrdersUseCase>() with provider {
-            // TODO: SharedOrdersUseCase on Firestore (`orders`, joined with `users` for the customer)
-            //  once the admin app gets infrastructure/firebase; then switch on AppEnvironment here.
-            mockOrders
+        bind<OrdersUseCase>() with factory {
+            // PRODUCTION reads `orders` and `users` in Firestore (services scoped in core/data).
+            val core: TemplateCore = instance()
+
+            when (instance<AppEnvironment>()) {
+                AppEnvironment.PRODUCTION -> SharedOrdersUseCase(on(core).instance(), on(core).instance())
+                AppEnvironment.MOCK -> mockOrders
+            }
         }
     }

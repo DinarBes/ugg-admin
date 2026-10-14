@@ -22,4 +22,5 @@ val authModule: DI.Module
         bind<OtpViewModel>() with factory {
             OtpViewModel(instance())
         }
+
     }

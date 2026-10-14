@@ -15,6 +15,8 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.ugg.admin.kit.auth.domain.entities.AuthFlow
 import com.ugg.admin.kit.auth.presentation.external.view.InitiateScreen
 import com.ugg.admin.kit.auth.presentation.external.view.OtpScreen
+import com.ugg.admin.kit.content.domain.entities.ContentFlow
+import com.ugg.admin.kit.content.presentation.external.view.ContentEditorScreen
 import com.ugg.admin.kit.navigation.domain.external.contexts.NavigationContext
 import com.ugg.admin.kit.navigation.domain.external.entities.NavigationEvent
 import com.ugg.admin.kit.navigation.presentation.internal.view.MainTab
@@ -23,8 +25,12 @@ import com.ugg.admin.kit.orders.domain.entities.OrdersFlow
 import com.ugg.admin.kit.orders.presentation.external.view.OrderDetailScreen
 import com.ugg.admin.kit.splash.domain.entities.SplashDestination
 import com.ugg.admin.kit.splash.domain.entities.SplashFlow
+import com.ugg.admin.kit.splash.presentation.external.view.NoAccessScreen
 import com.ugg.admin.kit.splash.presentation.external.view.SplashScreen
 import com.ugg.admin.kit.splash.presentation.external.view.models.SplashViewModel
+import com.ugg.admin.kit.stores.domain.entities.StoresFlow
+import com.ugg.admin.kit.stores.presentation.external.view.StoreScreen
+import com.ugg.admin.kit.stores.presentation.external.view.StoresScreen
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -50,8 +56,12 @@ fun NavigationScreen() {
                 subclass(SplashDestination.Splash::class, SplashDestination.Splash.serializer())
                 subclass(SplashFlow.Auth::class, SplashFlow.Auth.serializer())
                 subclass(SplashFlow.Launch::class, SplashFlow.Launch.serializer())
+                subclass(SplashFlow.NoAccess::class, SplashFlow.NoAccess.serializer())
                 subclass(AuthFlow.Otp::class, AuthFlow.Otp.serializer())
                 subclass(OrdersFlow.Detail::class, OrdersFlow.Detail.serializer())
+                subclass(StoresFlow.Stores::class, StoresFlow.Stores.serializer())
+                subclass(ContentFlow.Editor::class, ContentFlow.Editor.serializer())
+                subclass(StoresFlow.Store::class, StoresFlow.Store.serializer())
             }
         }
     }
@@ -85,14 +95,37 @@ fun NavigationScreen() {
                     selected = selectedTab,
                     onSelect = { selectedTab = it },
                     onOpenOrder = { navigationContext.tryNavigate(OrdersFlow.Detail(it)) },
+                    onOpenStores = { navigationContext.tryNavigate(StoresFlow.Stores) },
+                    onOpenContent = { navigationContext.tryNavigate(ContentFlow.Editor(it)) },
                 )
+            }
+            entry<ContentFlow.Editor> {
+                ContentEditorScreen(section = it.section, onBack = { navigationContext.back() })
+            }
+            entry<StoresFlow.Stores> {
+                StoresScreen(
+                    onBack = { navigationContext.back() },
+                    onOpenStore = { navigationContext.tryNavigate(StoresFlow.Store(it)) },
+                )
+            }
+            entry<StoresFlow.Store> {
+                StoreScreen(storeId = it.storeId, onBack = { navigationContext.back() })
             }
             entry<OrdersFlow.Detail> {
                 // TODO: «+ Добавить» фото — once the admin app uploads to Firebase Storage.
                 OrderDetailScreen(orderId = it.orderId, onBack = { navigationContext.back() })
             }
             entry<AuthFlow.Otp> {
-                OtpScreen(it.phone, it.sessionId)
+                OtpScreen(phone = it.phone, sessionId = it.sessionId, onBack = { navigationContext.back() })
+            }
+            entry<SplashFlow.NoAccess> {
+                NoAccessScreen(
+                    phone = it.phone,
+                    isOffline = it.isOffline,
+                    isChecking = splashState.isChecking,
+                    onRecheck = { splashViewModel.recheck() },
+                    onSignOut = { splashViewModel.signOut() },
+                )
             }
         }
     )

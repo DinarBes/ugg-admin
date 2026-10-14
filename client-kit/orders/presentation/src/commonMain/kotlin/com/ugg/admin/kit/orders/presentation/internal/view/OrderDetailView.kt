@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -49,6 +48,7 @@ import com.ugg.admin.kit.core.presentation.external.components.UggButton
 import com.ugg.admin.kit.core.presentation.external.components.UggButtonStyle
 import com.ugg.admin.kit.core.presentation.external.components.UggIconButton
 import com.ugg.admin.kit.core.presentation.external.components.UggPhotoPlaceholder
+import com.ugg.admin.kit.core.presentation.external.components.UggSection
 import com.ugg.admin.kit.core.presentation.external.components.UggTextField
 import com.ugg.admin.kit.core.presentation.external.icons.UggIcons
 import com.ugg.admin.kit.core.presentation.external.theme.UggTheme
@@ -187,25 +187,6 @@ private fun OrderContent(
 }
 
 @Composable
-private fun Section(title: String, content: @Composable ColumnScope.() -> Unit) {
-    val colors = UggTheme.colors
-    val shape = UggTheme.shapes.medium
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape)
-            .background(colors.surfaceElevated)
-            .border(1.dp, colors.outline, shape)
-            .padding(UggTheme.spacing.m),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
-        Text(text = title.uppercase(), style = UggTheme.typography.overline, color = colors.accentStrong)
-        content()
-    }
-}
-
-@Composable
 private fun StageSection(order: Order, isUpdating: Boolean, error: Throwable?, onAdvance: () -> Unit) {
     val colors = UggTheme.colors
     val reached = when (order.status) {
@@ -214,7 +195,7 @@ private fun StageSection(order: Order, isUpdating: Boolean, error: Throwable?, o
         else -> OrderStatus.stages.indexOf(order.status)
     }
 
-    Section(title = "Этап") {
+    UggSection(title = "Этап") {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             OrderStatus.stages.forEachIndexed { index, stage ->
                 val isReached = index <= reached
@@ -286,7 +267,7 @@ private fun CustomerSection(order: Order, onCall: (String) -> Unit, onWrite: (St
     val colors = UggTheme.colors
     val customer = order.customer
 
-    Section(title = "Клиент") {
+    UggSection(title = "Клиент") {
         Text(text = customer.name, style = UggTheme.typography.heading, color = colors.content)
         Text(
             text = listOf(customer.phone, customer.size).filter { it.isNotEmpty() }.joinToString(" · "),
@@ -320,7 +301,7 @@ private fun CustomerSection(order: Order, onCall: (String) -> Unit, onWrite: (St
 private fun ItemsSection(order: Order) {
     val colors = UggTheme.colors
 
-    Section(title = "Состав") {
+    UggSection(title = "Состав") {
         order.boots?.let { boots ->
             Row(horizontalArrangement = Arrangement.spacedBy(UggTheme.spacing.s), verticalAlignment = Alignment.CenterVertically) {
                 Box(
@@ -363,7 +344,7 @@ private fun DeliverySection(
     val shape = UggTheme.shapes.medium
     var isPickingDate by rememberSaveable { mutableStateOf(false) }
 
-    Section(title = "Доставка и срок") {
+    UggSection(title = "Доставка и срок") {
         Text(text = order.delivery.full, style = UggTheme.typography.body, color = colors.content)
 
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -434,7 +415,7 @@ private fun PhotosSection(photos: List<String>, onAddPhoto: () -> Unit) {
     val shape = UggTheme.shapes.small
     val tiles: List<String?> = photos + null // null is the «+ Добавить» tile
 
-    Section(title = "Фото процесса для клиента") {
+    UggSection(title = "Фото процесса для клиента") {
         tiles.chunked(3).forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(UggTheme.spacing.xs)) {
                 row.forEach { photo ->

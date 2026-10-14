@@ -1,18 +1,12 @@
 package com.ugg.admin.kit.navigation.presentation.internal.view
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import com.ugg.admin.kit.catalog.presentation.external.view.CatalogScreen
+import com.ugg.admin.kit.clients.presentation.external.view.ClientsScreen
+import com.ugg.admin.kit.content.domain.entities.ContentSection
+import com.ugg.admin.kit.content.presentation.external.view.ContentScreen
 import com.ugg.admin.kit.core.presentation.external.components.UggTabBar
 import com.ugg.admin.kit.core.presentation.external.components.UggTabItem
 import com.ugg.admin.kit.core.presentation.external.icons.UggIcons
@@ -28,7 +22,7 @@ internal enum class MainTab(val label: String, val icon: () -> ImageVector) {
 
 /**
  * The admin shell behind [com.ugg.admin.kit.splash.domain.entities.SplashFlow.Launch]: tab bar plus
- * the selected section. Screens pushed on the root back stack (an order card) cover it, tab bar
+ * the selected section. Screens pushed on the root back stack (an order card, a content editor, the stores) cover it, tab bar
  * included. The selected tab is owned by the host so it survives those screens.
  */
 @Composable
@@ -36,6 +30,8 @@ internal fun MainTabsView(
     selected: MainTab,
     onSelect: (MainTab) -> Unit,
     onOpenOrder: (orderId: String) -> Unit,
+    onOpenStores: () -> Unit,
+    onOpenContent: (ContentSection) -> Unit,
 ) {
     val tabs = MainTab.entries
 
@@ -51,28 +47,9 @@ internal fun MainTabsView(
     ) { padding ->
         when (selected) {
             MainTab.Orders -> OrdersScreen(contentPadding = padding, onOpenOrder = onOpenOrder)
-            MainTab.Catalog -> ComingSoon(kicker = "Модель «Классика»", title = "Каталог", contentPadding = padding)
-            MainTab.Content -> ComingSoon(kicker = "Тексты приложения", title = "Контент", contentPadding = padding)
-            MainTab.Clients -> ComingSoon(kicker = "Покупатели", title = "Клиенты", contentPadding = padding)
+            MainTab.Catalog -> CatalogScreen(contentPadding = padding)
+            MainTab.Content -> ContentScreen(contentPadding = padding, onOpenSection = onOpenContent, onOpenStores = onOpenStores)
+            MainTab.Clients -> ClientsScreen(contentPadding = padding, onOpenOrder = onOpenOrder)
         }
-    }
-}
-
-/** Sections that are designed but not built yet. */
-@Composable
-private fun ComingSoon(kicker: String, title: String, contentPadding: PaddingValues) {
-    val colors = UggTheme.colors
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colors.background)
-            .padding(contentPadding)
-            .padding(horizontal = UggTheme.spacing.l, vertical = UggTheme.spacing.xl),
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Text(text = kicker.uppercase(), style = UggTheme.typography.overline, color = colors.accentStrong)
-        Text(text = title, style = UggTheme.typography.displayL.copy(fontWeight = FontWeight.SemiBold), color = colors.content)
-        Text(text = "Раздел появится следующим шагом", style = UggTheme.typography.bodySmall, color = colors.contentSecondary)
     }
 }

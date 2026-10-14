@@ -13,6 +13,8 @@ kotlin {
 
             implementation(projects.infrastructure.apiCore)
             implementation(projects.infrastructure.apiAuth)
+            api(projects.infrastructure.firebaseAuth)
+            api(projects.infrastructure.firebaseFirestore)
 
             implementation(libs.kotlinx.datetime)
         }

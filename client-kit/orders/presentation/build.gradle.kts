@@ -15,6 +15,9 @@ kotlin {
             implementation(projects.clientKit.coreDomain)
             implementation(projects.clientKit.coreData)
             implementation(projects.clientKit.corePresentation)
+
+            // TemplateCore: the scope the Firestore services live in.
+            implementation(projects.infrastructure.apiCore)
         }
     }
 }

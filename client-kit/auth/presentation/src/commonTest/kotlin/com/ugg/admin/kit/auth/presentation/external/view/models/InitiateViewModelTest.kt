@@ -1,10 +1,18 @@
 package com.ugg.admin.kit.auth.presentation.external.view.models
 
 import com.ugg.admin.kit.auth.domain.entities.AuthFlow
+import com.ugg.admin.kit.auth.domain.entities.PhoneChallenge
+import com.ugg.admin.kit.auth.domain.states.InitiateState
 import com.ugg.admin.kit.auth.domain.useCases.AuthUseCase
-import com.ugg.admin.kit.auth.presentation.external.states.InitiateState
 import com.ugg.admin.kit.navigation.domain.external.contexts.NavigationContext
 import com.ugg.admin.kit.navigation.domain.external.entities.NavigationEvent
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -13,13 +21,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class InitiateViewModelTest {
@@ -67,13 +68,32 @@ class InitiateViewModelTest {
         assertFalse(vm.state.value.isLoading)
     }
 
+    @Test
+    fun verifiedWithoutCodeStaysPut() = runTest {
+        val navigation = NavigationContext()
+        val vm = InitiateViewModel(InstantUseCase(), navigation)
+        vm.onStateChange(vm.state.value.copy(phone = PHONE))
+
+        vm.onSubmit()
+        advanceUntilIdle()
+
+        // No OTP step: the splash reacts to the signed-in user instead.
+        assertTrue(navigation.events.replayCache.isEmpty())
+        assertNull(vm.state.value.error)
+    }
+
+    private class InstantUseCase : AuthUseCase {
+        override suspend fun initiate(phone: String): PhoneChallenge = PhoneChallenge.SignedIn
+        override suspend fun login(otp: String, sessionId: String) = Unit
+    }
+
     private class SuccessUseCase : AuthUseCase {
-        override suspend fun initiate(phone: String): String = SESSION_ID
+        override suspend fun initiate(phone: String): PhoneChallenge = PhoneChallenge.CodeSent(SESSION_ID)
         override suspend fun login(otp: String, sessionId: String) = Unit
     }
 
     private class FailureUseCase : AuthUseCase {
-        override suspend fun initiate(phone: String): String = throw Exception("network error")
+        override suspend fun initiate(phone: String): PhoneChallenge = throw Exception("network error")
         override suspend fun login(otp: String, sessionId: String) = Unit
     }
 

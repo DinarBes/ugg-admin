@@ -13,6 +13,7 @@ kotlin {
             implementation(projects.clientKit.splashDomain)
 
             implementation(projects.clientKit.coreDomain)
+            implementation(projects.clientKit.corePresentation)
 
             implementation(projects.clientKit.navigationDomain)
         }

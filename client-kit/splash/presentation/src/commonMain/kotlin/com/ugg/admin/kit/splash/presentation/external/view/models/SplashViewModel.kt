@@ -34,7 +34,7 @@ class SplashViewModel(
 
         // KeystoreUnavailableException lands here: no navigation happens, the splash stays put and
         // shows the reason instead of spinning forever or guessing that the user is signed out.
-        state.update { it.copy(error = throwable) }
+        state.update { it.copy(error = throwable, isChecking = false) }
     }
 
     init {
@@ -46,6 +46,23 @@ class SplashViewModel(
         state.update { it.copy(error = null) }
 
         navigationContext.navigate(splashUseCase.getInitialFlow()) { clear() }
+    }
+
+    /** «Проверить ещё раз»: access may have been granted while the screen was open. */
+    fun recheck() = viewModelScope.launch(unexpectedExceptionHandler) {
+        if (state.value.isChecking) return@launch
+        state.update { it.copy(isChecking = true, error = null) }
+
+        try {
+            navigationContext.navigate(splashUseCase.recheck()) { clear() }
+        } finally {
+            state.update { it.copy(isChecking = false) }
+        }
+    }
+
+    /** The sign-in screen follows through [observe]. */
+    fun signOut() = viewModelScope.launch(unexpectedExceptionHandler) {
+        splashUseCase.signOut()
     }
 
     private fun observe() = viewModelScope.launch(unexpectedExceptionHandler) {

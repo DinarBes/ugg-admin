@@ -16,6 +16,8 @@ kotlin {
     val modules = listOf(
         projects.infrastructure.apiCore,
         projects.infrastructure.apiAuth,
+        projects.infrastructure.firebaseAuth,
+        projects.infrastructure.firebaseFirestore,
         projects.infrastructure.keystoreFoundation,
         projects.infrastructure.keystoreSession,
 
@@ -38,6 +40,22 @@ kotlin {
         projects.clientKit.ordersData,
         projects.clientKit.ordersDomain,
         projects.clientKit.ordersPresentation,
+
+        projects.clientKit.catalogData,
+        projects.clientKit.catalogDomain,
+        projects.clientKit.catalogPresentation,
+
+        projects.clientKit.storesData,
+        projects.clientKit.storesDomain,
+        projects.clientKit.storesPresentation,
+
+        projects.clientKit.clientsData,
+        projects.clientKit.clientsDomain,
+        projects.clientKit.clientsPresentation,
+
+        projects.clientKit.contentData,
+        projects.clientKit.contentDomain,
+        projects.clientKit.contentPresentation,
     )
 
     targets.filterIsInstance<KotlinNativeTarget>().forEach { target ->

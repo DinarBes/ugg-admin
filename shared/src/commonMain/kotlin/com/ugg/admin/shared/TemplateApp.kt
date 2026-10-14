@@ -5,6 +5,9 @@ import com.ugg.admin.infrastructure.api.core.TemplateCore
 import com.ugg.admin.infrastructure.keystore.foundation.external.Keystore
 import com.ugg.admin.infrastructure.keystore.session.AccessService
 import com.ugg.admin.kit.auth.presentation.external.authModule
+import com.ugg.admin.kit.catalog.presentation.external.catalogModule
+import com.ugg.admin.kit.clients.presentation.external.clientsModule
+import com.ugg.admin.kit.content.presentation.external.contentModule
 import com.ugg.admin.kit.core.data.coreDataModule
 import com.ugg.admin.kit.core.domain.AppEnvironment
 import com.ugg.admin.kit.core.domain.resolve
@@ -12,6 +15,7 @@ import com.ugg.admin.kit.navigation.domain.external.contexts.NavigationContext
 import com.ugg.admin.kit.navigation.presentation.external.navigationModule
 import com.ugg.admin.kit.orders.presentation.external.ordersModule
 import com.ugg.admin.kit.splash.presentation.external.splashModule
+import com.ugg.admin.kit.stores.presentation.external.storesModule
 import com.ugg.admin.shared.dsl.TemplateAppBuilder
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import org.kodein.di.DI
@@ -70,6 +74,10 @@ class TemplateApp(block: TemplateAppBuilder.() -> Unit = {}) {
             import(navigationModule)
             import(splashModule)
             import(ordersModule)
+            import(catalogModule)
+            import(storesModule)
+            import(clientsModule)
+            import(contentModule)
         }
     }
 

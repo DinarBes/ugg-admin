@@ -18,4 +18,13 @@ sealed class SplashFlow : Destination() {
     data object Launch : SplashFlow() {
         override val isTabViewVisible = false
     }
+
+    /**
+     * Signed in, but the number has no admin access ([isOffline] `false`), or it couldn't be
+     * checked for lack of network ([isOffline] `true`).
+     */
+    @Serializable
+    data class NoAccess(val phone: String, val isOffline: Boolean) : SplashFlow() {
+        override val isTabViewVisible = false
+    }
 }
