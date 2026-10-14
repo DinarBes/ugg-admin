@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.ugg.admin.kit.core.presentation.external.icons.UggIcons
 import com.ugg.admin.kit.core.presentation.external.theme.UggTheme
@@ -37,6 +38,8 @@ fun UggButton(
     style: UggButtonStyle = UggButtonStyle.Primary,
     enabled: Boolean = true,
     showArrow: Boolean = true,
+    /** Drawn before the text, e.g. a phone for «Позвонить». */
+    leadingIcon: ImageVector? = null,
 ) {
     val colors = UggTheme.colors
 
@@ -60,10 +63,19 @@ fun UggButton(
     ) {
         Row(
             modifier = Modifier.padding(horizontal = UggTheme.spacing.xl),
-            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.spacedBy(if (leadingIcon != null) 8.dp else 10.dp, Alignment.CenterHorizontally),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = text, style = UggTheme.typography.button, color = content)
+            if (leadingIcon != null) {
+                Icon(
+                    imageVector = leadingIcon,
+                    contentDescription = null,
+                    tint = content,
+                    modifier = Modifier.size(18.dp),
+                )
+            }
+
+            Text(text = text, style = UggTheme.typography.button, color = content, maxLines = 1)
 
             if (showArrow) {
                 Icon(

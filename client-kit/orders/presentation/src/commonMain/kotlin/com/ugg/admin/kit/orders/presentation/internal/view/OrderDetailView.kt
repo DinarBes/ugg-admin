@@ -300,6 +300,7 @@ private fun CustomerSection(order: Order, onCall: (String) -> Unit, onWrite: (St
                     onClick = { onCall(customer.phoneDial) },
                     style = UggButtonStyle.Secondary,
                     showArrow = false,
+                    leadingIcon = UggIcons.Phone,
                     modifier = Modifier.weight(1f),
                 )
                 UggButton(
@@ -307,6 +308,7 @@ private fun CustomerSection(order: Order, onCall: (String) -> Unit, onWrite: (St
                     onClick = { onWrite(customer.phoneDial) },
                     style = UggButtonStyle.Secondary,
                     showArrow = false,
+                    leadingIcon = UggIcons.Message,
                     modifier = Modifier.weight(1f),
                 )
             }
