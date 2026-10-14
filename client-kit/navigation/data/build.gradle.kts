@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.template.client.kit.navigation.data"
+        namespace = "com.ugg.admin.kit.navigation.data"
     }
 
     sourceSets {

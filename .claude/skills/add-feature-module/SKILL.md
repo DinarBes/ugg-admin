@@ -307,7 +307,7 @@ version mismatch, see CLAUDE.md) — use the iOS target.
 
 | Mistake | Fix |
 |---------|-----|
-| Hardcoding `com.template.client` | Read `androidApp/build.gradle.kts` namespace first |
+| Hardcoding `com.ugg.admin` | Read `androidApp/build.gradle.kts` namespace first |
 | `setup.multiplatform.library` on a feature module | domain/data use `feature`, presentation uses `feature.compose` |
 | States in `domain/states/` | They are UI shapes — `presentation/external/states/` |
 | Repository named `Shared<Feature>UseCase` | The interface is the UseCase; the implementation is a Repository |

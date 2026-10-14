@@ -3,10 +3,10 @@ plugins {
 }
 
 android {
-    namespace = "com.template.client.android"
+    namespace = "com.ugg.admin"
 
     defaultConfig {
-        applicationId = "com.template.client.android"
+        applicationId = "com.ugg.admin"
         versionCode = 1
         versionName = "1.0"
     }

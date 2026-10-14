@@ -1,4 +1,4 @@
-rootProject.name = "template-client"
+rootProject.name = "ugg-admin"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

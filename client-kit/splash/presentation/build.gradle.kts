@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.template.client.kit.splash.presentation"
+        namespace = "com.ugg.admin.kit.splash.presentation"
     }
 
     sourceSets {

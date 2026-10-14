@@ -6,7 +6,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.template.client.infrastructure.keystore.foundation"
+        namespace = "com.ugg.admin.infrastructure.keystore.foundation"
     }
 
     sourceSets {

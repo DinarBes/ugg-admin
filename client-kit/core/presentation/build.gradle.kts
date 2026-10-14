@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.template.client.kit.core.presentation"
+        namespace = "com.ugg.admin.kit.core.presentation"
     }
 
     sourceSets {

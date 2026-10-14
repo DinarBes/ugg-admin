@@ -8,10 +8,10 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.template.client.shared"
+        namespace = "com.ugg.admin.shared"
     }
 
-    val frameworkName = "TemplateShared"
+    val frameworkName = "UggAdminShared"
     val xcFramework = XCFramework(frameworkName)
     val modules = listOf(
         projects.infrastructure.apiCore,

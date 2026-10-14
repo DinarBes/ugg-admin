@@ -1,10 +1,10 @@
-# Template Client — CLAUDE.md
+# Сарма Admin (ugg-admin) — CLAUDE.md
 
 ## Project Overview
 
-Kotlin Multiplatform Mobile (KMM) template application. Targets Android and iOS via Compose Multiplatform. Stub implementations ready for backend integration.
+Админское приложение «Сарма» (ugg-admin) для управления клиентским приложением ugg-client: заказы, каталог, контент, клиенты. Kotlin Multiplatform (KMM), тот же Firebase-проект uggs-e27e4. Targets Android and iOS via Compose Multiplatform. Stub implementations ready for backend integration.
 
-- **Organization**: `com.template`
+- **Organization**: `com.ugg`
 - **Version**: 1.0.0
 - **Kotlin**: 2.3.10 / JVM 21
 - **Min Android SDK**: 24, Compile/Target SDK: 36
@@ -23,7 +23,7 @@ Kotlin Multiplatform Mobile (KMM) template application. Targets Android and iOS 
 ./gradlew :client-kit:auth-presentation:iosSimulatorArm64Test
 
 # iOS XCFramework
-./gradlew :shared:assembleTemplateSharedXCFramework
+./gradlew :shared:assembleUggAdminSharedXCFramework
 ```
 
 > `testAndroidHostTest` currently fails in modules that construct `MultiplatformCore`: the
@@ -34,9 +34,9 @@ Kotlin Multiplatform Mobile (KMM) template application. Targets Android and iOS 
 ## Module Structure
 
 ```
-template-client/
+ugg-admin/
 ├── androidApp/          # Android entry point (MainActivity)
-├── shared/              # KMP shared library → exports TemplateShared.xcframework for iOS
+├── shared/              # KMP shared library → exports UggAdminShared.xcframework for iOS
 │   └── AppDI.kt         # Root DI composition
 │   └── ContentView.kt   # Root composable with withDI wrapper
 ├── infrastructure/      # HTTP client + secure storage foundation
@@ -82,7 +82,7 @@ Dependencies always flow inward: `presentation → data → domain`.
 | Testing | Kotlin Test + Coroutines Test |
 
 External dependencies:
-- `template-client-api-core:1.0.0` — API client (replace with your own)
+- `ugg-api-core:1.0.0` — API client (replace with your own)
 - `multiplatform-foundation:1.3.1` (cloud.paybuddy) — core and network modules
 
 ## Dependency Injection
@@ -227,7 +227,7 @@ Tests live in `commonTest/` alongside each feature module. Use `StandardTestDisp
 ## Adding a New Feature Module
 
 When asked to create a feature module (e.g. "add a `profile` module"), follow these steps in order.
-Notation used below: `<feature>` = lowercase name (e.g. `profile`), `<Feature>` = capitalized (e.g. `Profile`), `<pkg>` = root package from `androidApp/build.gradle.kts` minus `.android` (e.g. `com.template.client`).
+Notation used below: `<feature>` = lowercase name (e.g. `profile`), `<Feature>` = capitalized (e.g. `Profile`), `<pkg>` = root package from `androidApp/build.gradle.kts` minus `.android` (e.g. `com.ugg.admin`).
 
 ### Step 1 — Create 12 files
 
@@ -605,24 +605,24 @@ After forking, replace all project-specific identifiers. The table below lists e
 
 | Token | Current value | Where it appears |
 |-------|--------------|-----------------|
-| Root project name | `template-client` | `settings.gradle.kts:1` |
-| Gradle group | `com.template` | `build.gradle.kts:8` |
-| Android applicationId | `com.template.client.android` | `androidApp/build.gradle.kts:9` |
-| Android namespace (app) | `com.template.client.android` | `androidApp/build.gradle.kts:6` |
-| iOS framework name | `TemplateShared` | `shared/build.gradle.kts:14` |
-| Kotlin root package | `com.template.client` | All `*.kt` files and module `namespace` fields |
-| External API group | `com.template` | `gradle/libs.versions.toml:62` |
+| Root project name | `ugg-admin` | `settings.gradle.kts:1` |
+| Gradle group | `com.ugg` | `build.gradle.kts:8` |
+| Android applicationId | `com.ugg.admin` | `androidApp/build.gradle.kts:9` |
+| Android namespace (app) | `com.ugg.admin` | `androidApp/build.gradle.kts:6` |
+| iOS framework name | `UggAdminShared` | `shared/build.gradle.kts:14` |
+| Kotlin root package | `com.ugg.admin` | All `*.kt` files and module `namespace` fields |
+| External API group | `com.ugg` | `gradle/libs.versions.toml:62` |
 
 ### Step-by-Step Rename
 
 **1. `settings.gradle.kts`** — project name used by Gradle and IDE:
 ```kotlin
-rootProject.name = "your-project-name"   // was: "template-client"
+rootProject.name = "your-project-name"   // was: "ugg-admin"
 ```
 
 **2. `build.gradle.kts` (root)** — Maven group for published artifacts:
 ```kotlin
-group = "com.yourcompany"                 // was: "com.template"
+group = "com.yourcompany"                 // was: "com.ugg"
 ```
 
 **3. `androidApp/build.gradle.kts`** — Android application identity:
@@ -634,15 +634,15 @@ applicationId = "com.yourcompany.yourapp.android"
 **4. `shared/build.gradle.kts`** — iOS framework name (used in Xcode project):
 ```kotlin
 namespace = "com.yourcompany.yourapp.shared"
-val frameworkName = "YourAppShared"       // was: "TemplateShared"
+val frameworkName = "YourAppShared"       // was: "UggAdminShared"
 ```
 Update the Xcode project to reference the renamed `.xcframework`.
 
 **5. All module `build.gradle.kts` files** — Android namespaces (9 files under `client-kit/`):
 ```
-com.template.client.kit.core.data         → com.yourcompany.yourapp.kit.core.data
-com.template.client.kit.core.domain       → com.yourcompany.yourapp.kit.core.domain
-com.template.client.kit.core.presentation → com.yourcompany.yourapp.kit.core.presentation
+com.ugg.admin.kit.core.data         → com.yourcompany.yourapp.kit.core.data
+com.ugg.admin.kit.core.domain       → com.yourcompany.yourapp.kit.core.domain
+com.ugg.admin.kit.core.presentation → com.yourcompany.yourapp.kit.core.presentation
 ... same pattern for auth and navigation modules
 ```
 
@@ -650,20 +650,20 @@ com.template.client.kit.core.presentation → com.yourcompany.yourapp.kit.core.p
 
 Use IDE rename (Right-click package → Refactor → Rename) or a global find-and-replace:
 ```
-com.template.client  →  com.yourcompany.yourapp
+com.ugg.admin  →  com.yourcompany.yourapp
 ```
 This covers every `package` declaration and `import` statement across all modules.
 
 **7. `gradle/libs.versions.toml`** — external API dependency:
 ```toml
-template-client-api-core = { group = "com.yourcompany", name = "your-api-core", ... }
+ugg-api-core = { group = "com.yourcompany", name = "your-api-core", ... }
 ```
 
 **8. Class and file name prefixes** — the template uses `Template`/`template-` prefixes in a few places:
 
 | Current name | Where | Rename to |
 |---|---|---|
-| `TemplateShared` (framework) | `shared/build.gradle.kts` | `YourAppShared` |
+| `UggAdminShared` (framework) | `shared/build.gradle.kts` | `YourAppShared` |
 | `AppDI` | `shared/.../AppDI.kt` | Keep or rename to `YourAppDI` |
 | `ContentView` | `shared/.../ContentView.kt` | Keep or rename |
 

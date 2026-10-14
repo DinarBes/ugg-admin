@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.template.client.infrastructure.keystore.session"
+        namespace = "com.ugg.admin.infrastructure.keystore.session"
     }
 
     sourceSets {

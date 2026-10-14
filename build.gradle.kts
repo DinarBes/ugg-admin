@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-    group = "com.template"
+    group = "com.ugg"
     version = "1.0.0"
 
     repositories {

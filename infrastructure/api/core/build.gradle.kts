@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.template.client.infrastructure.api.core"
+        namespace = "com.ugg.admin.infrastructure.api.core"
     }
 
     sourceSets {

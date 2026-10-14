@@ -4,6 +4,6 @@ plugins {
 
 kotlin {
     android {
-        namespace = "com.template.client.kit.core.domain"
+        namespace = "com.ugg.admin.kit.core.domain"
     }
 }
