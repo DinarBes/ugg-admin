@@ -17,6 +17,7 @@ import org.kodein.di.compose.viewmodel.rememberViewModel
 fun OrdersScreen(
     contentPadding: PaddingValues,
     onOpenOrder: (orderId: String) -> Unit,
+    onOpenSettings: () -> Unit,
 ) {
     val viewModel: OrdersViewModel by rememberViewModel()
     val state by viewModel.state.collectAsState()
@@ -28,6 +29,7 @@ fun OrdersScreen(
         onToggleSearch = viewModel::onToggleSearch,
         onQuery = viewModel::onQuery,
         onOpenOrder = onOpenOrder,
+        onOpenSettings = onOpenSettings,
         onRetry = viewModel::fetch,
     )
 }

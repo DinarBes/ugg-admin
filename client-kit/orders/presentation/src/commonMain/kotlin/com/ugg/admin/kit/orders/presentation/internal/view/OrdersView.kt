@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -52,6 +54,7 @@ internal fun OrdersView(
     onToggleSearch: () -> Unit,
     onQuery: (String) -> Unit,
     onOpenOrder: (String) -> Unit,
+    onOpenSettings: () -> Unit,
     onRetry: () -> Unit,
 ) {
     val colors = UggTheme.colors
@@ -71,6 +74,7 @@ internal fun OrdersView(
                 today = state.today,
                 isSearching = state.isSearching,
                 onToggleSearch = onToggleSearch,
+                onOpenSettings = onOpenSettings,
                 modifier = Modifier.padding(horizontal = horizontal),
             )
         }
@@ -143,6 +147,7 @@ private fun Header(
     today: String,
     isSearching: Boolean,
     onToggleSearch: () -> Unit,
+    onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val colors = UggTheme.colors
@@ -153,6 +158,8 @@ private fun Header(
             Text(text = "Заказы", style = UggTheme.typography.displayL.copy(fontWeight = FontWeight.SemiBold), color = colors.content)
             Text(text = today, style = UggTheme.typography.bodySmall, color = colors.contentSecondary)
         }
+        UggIconButton(icon = UggIcons.Settings, contentDescription = "Настройки", onClick = onOpenSettings)
+        Spacer(Modifier.width(UggTheme.spacing.xs))
         UggIconButton(
             icon = if (isSearching) UggIcons.Close else UggIcons.Search,
             contentDescription = if (isSearching) "Закрыть поиск" else "Поиск по заказам",

@@ -1,5 +1,6 @@
 package com.ugg.admin.kit.content.data.useCases
 
+import com.ugg.admin.infrastructure.firebase.auth.PhoneAuthService
 import com.ugg.admin.infrastructure.firebase.firestore.services.ContentService
 import com.ugg.admin.kit.content.data.mappers.toDomain
 import com.ugg.admin.kit.content.data.mappers.toDto
@@ -12,16 +13,18 @@ import com.ugg.admin.kit.content.domain.entities.OnboardingContent
 import com.ugg.admin.kit.content.domain.entities.StoryContent
 import com.ugg.admin.kit.content.domain.useCases.ContentUseCase
 import com.ugg.admin.kit.core.data.content.translatingContentErrors
+import com.ugg.admin.kit.core.data.content.whileSignedIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /** `content/{home, story, care, onboarding, checkout}` in Firestore — what the client app's screens read. */
 class SharedContentUseCase(
+    private val phoneAuth: PhoneAuthService,
     private val content: ContentService,
 ) : ContentUseCase {
 
     override fun observeUpdatedAt(): Flow<Map<ContentSection, Long>> =
-        content.observeUpdatedAt()
+        phoneAuth.whileSignedIn(emptyMap()) { content.observeUpdatedAt() }
             .map { byId -> ContentSection.entries.mapNotNull { section -> byId[section.id]?.let { section to it } }.toMap() }
             .translatingContentErrors()
 

@@ -14,6 +14,7 @@ import com.ugg.admin.kit.core.domain.resolve
 import com.ugg.admin.kit.navigation.domain.external.contexts.NavigationContext
 import com.ugg.admin.kit.navigation.presentation.external.navigationModule
 import com.ugg.admin.kit.orders.presentation.external.ordersModule
+import com.ugg.admin.kit.settings.presentation.external.settingsModule
 import com.ugg.admin.kit.splash.presentation.external.splashModule
 import com.ugg.admin.kit.stores.presentation.external.storesModule
 import com.ugg.admin.shared.dsl.TemplateAppBuilder
@@ -78,6 +79,7 @@ class TemplateApp(block: TemplateAppBuilder.() -> Unit = {}) {
             import(storesModule)
             import(clientsModule)
             import(contentModule)
+            import(settingsModule)
         }
     }
 

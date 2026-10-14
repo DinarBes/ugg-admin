@@ -32,6 +32,7 @@ internal fun MainTabsView(
     onOpenOrder: (orderId: String) -> Unit,
     onOpenStores: () -> Unit,
     onOpenContent: (ContentSection) -> Unit,
+    onOpenSettings: () -> Unit,
 ) {
     val tabs = MainTab.entries
 
@@ -46,7 +47,7 @@ internal fun MainTabsView(
         },
     ) { padding ->
         when (selected) {
-            MainTab.Orders -> OrdersScreen(contentPadding = padding, onOpenOrder = onOpenOrder)
+            MainTab.Orders -> OrdersScreen(contentPadding = padding, onOpenOrder = onOpenOrder, onOpenSettings = onOpenSettings)
             MainTab.Catalog -> CatalogScreen(contentPadding = padding)
             MainTab.Content -> ContentScreen(contentPadding = padding, onOpenSection = onOpenContent, onOpenStores = onOpenStores)
             MainTab.Clients -> ClientsScreen(contentPadding = padding, onOpenOrder = onOpenOrder)

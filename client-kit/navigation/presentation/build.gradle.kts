@@ -22,6 +22,8 @@ kotlin {
             implementation(projects.clientKit.clientsPresentation)
             implementation(projects.clientKit.contentDomain)
             implementation(projects.clientKit.contentPresentation)
+            implementation(projects.clientKit.settingsDomain)
+            implementation(projects.clientKit.settingsPresentation)
 
             implementation(projects.clientKit.storesDomain)
             implementation(projects.clientKit.storesPresentation)

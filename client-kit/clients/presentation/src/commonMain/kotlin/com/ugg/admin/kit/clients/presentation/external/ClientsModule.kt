@@ -25,7 +25,7 @@ val clientsModule: DI.Module
             val core: TemplateCore = instance()
 
             when (instance<AppEnvironment>()) {
-                AppEnvironment.PRODUCTION -> SharedClientsUseCase(on(core).instance(), on(core).instance())
+                AppEnvironment.PRODUCTION -> SharedClientsUseCase(on(core).instance(), on(core).instance(), on(core).instance())
                 AppEnvironment.MOCK -> mockClients
             }
         }

@@ -1,5 +1,6 @@
 package com.ugg.admin.kit.clients.data.useCases
 
+import com.ugg.admin.infrastructure.firebase.auth.PhoneAuthService
 import com.ugg.admin.infrastructure.firebase.firestore.dto.OrderDto
 import com.ugg.admin.infrastructure.firebase.firestore.dto.OrderStatus
 import com.ugg.admin.infrastructure.firebase.firestore.dto.UserDto
@@ -9,6 +10,7 @@ import com.ugg.admin.kit.clients.domain.entities.Client
 import com.ugg.admin.kit.clients.domain.entities.ClientOrder
 import com.ugg.admin.kit.clients.domain.useCases.ClientsUseCase
 import com.ugg.admin.kit.core.data.content.translatingContentErrors
+import com.ugg.admin.kit.core.data.content.whileSignedIn
 import com.ugg.admin.kit.core.data.formatting.formatPhone
 import com.ugg.admin.kit.core.data.formatting.toDayLabel
 import kotlin.time.Clock
@@ -17,17 +19,19 @@ import kotlinx.coroutines.flow.combine
 
 /** `users` in Firestore with their orders counted; both live. */
 class SharedClientsUseCase(
+    private val phoneAuth: PhoneAuthService,
     private val users: UserService,
     private val orders: OrderService,
     private val clock: Clock = Clock.System,
 ) : ClientsUseCase {
 
-    override fun observeClients(): Flow<List<Client>> =
+    override fun observeClients(): Flow<List<Client>> = phoneAuth.whileSignedIn(emptyList()) {
         combine(users.observeUsers(), orders.observeOrders()) { profiles, allOrders ->
             val byUser = allOrders.groupBy { it.userId }
             val now = clock.now().toEpochMilliseconds()
             profiles.map { it.toClient(byUser[it.id].orEmpty(), now) }
-        }.translatingContentErrors()
+        }
+    }.translatingContentErrors()
 }
 
 /** [orders] newest first, as the order service returns them. */

@@ -31,7 +31,7 @@ val contentModule: DI.Module
             val core: TemplateCore = instance()
 
             when (instance<AppEnvironment>()) {
-                AppEnvironment.PRODUCTION -> SharedContentUseCase(on(core).instance())
+                AppEnvironment.PRODUCTION -> SharedContentUseCase(on(core).instance(), on(core).instance())
                 AppEnvironment.MOCK -> mockContent
             }
         }

@@ -23,6 +23,8 @@ import com.ugg.admin.kit.navigation.presentation.internal.view.MainTab
 import com.ugg.admin.kit.navigation.presentation.internal.view.MainTabsView
 import com.ugg.admin.kit.orders.domain.entities.OrdersFlow
 import com.ugg.admin.kit.orders.presentation.external.view.OrderDetailScreen
+import com.ugg.admin.kit.settings.domain.entities.SettingsFlow
+import com.ugg.admin.kit.settings.presentation.external.view.SettingsScreen
 import com.ugg.admin.kit.splash.domain.entities.SplashDestination
 import com.ugg.admin.kit.splash.domain.entities.SplashFlow
 import com.ugg.admin.kit.splash.presentation.external.view.NoAccessScreen
@@ -61,6 +63,7 @@ fun NavigationScreen() {
                 subclass(OrdersFlow.Detail::class, OrdersFlow.Detail.serializer())
                 subclass(StoresFlow.Stores::class, StoresFlow.Stores.serializer())
                 subclass(ContentFlow.Editor::class, ContentFlow.Editor.serializer())
+                subclass(SettingsFlow.Settings::class, SettingsFlow.Settings.serializer())
                 subclass(StoresFlow.Store::class, StoresFlow.Store.serializer())
             }
         }
@@ -97,6 +100,18 @@ fun NavigationScreen() {
                     onOpenOrder = { navigationContext.tryNavigate(OrdersFlow.Detail(it)) },
                     onOpenStores = { navigationContext.tryNavigate(StoresFlow.Stores) },
                     onOpenContent = { navigationContext.tryNavigate(ContentFlow.Editor(it)) },
+                    onOpenSettings = { navigationContext.tryNavigate(SettingsFlow.Settings) },
+                )
+            }
+            entry<SettingsFlow.Settings> {
+                // The splash owns the session: after signing out it clears the stack and shows
+                // the phone step; the orders tab is where the next admin starts.
+                SettingsScreen(
+                    onBack = { navigationContext.back() },
+                    onSignOut = {
+                        selectedTab = MainTab.Orders
+                        splashViewModel.signOut()
+                    },
                 )
             }
             entry<ContentFlow.Editor> {

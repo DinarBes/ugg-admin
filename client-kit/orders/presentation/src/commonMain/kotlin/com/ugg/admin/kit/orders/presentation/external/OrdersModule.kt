@@ -32,7 +32,7 @@ val ordersModule: DI.Module
             val core: TemplateCore = instance()
 
             when (instance<AppEnvironment>()) {
-                AppEnvironment.PRODUCTION -> SharedOrdersUseCase(on(core).instance(), on(core).instance())
+                AppEnvironment.PRODUCTION -> SharedOrdersUseCase(on(core).instance(), on(core).instance(), on(core).instance())
                 AppEnvironment.MOCK -> mockOrders
             }
         }
