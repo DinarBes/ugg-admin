@@ -10,6 +10,7 @@ import com.ugg.admin.kit.core.domain.AppEnvironment
 import com.ugg.admin.kit.core.domain.resolve
 import com.ugg.admin.kit.navigation.domain.external.contexts.NavigationContext
 import com.ugg.admin.kit.navigation.presentation.external.navigationModule
+import com.ugg.admin.kit.orders.presentation.external.ordersModule
 import com.ugg.admin.kit.splash.presentation.external.splashModule
 import com.ugg.admin.shared.dsl.TemplateAppBuilder
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -68,6 +69,7 @@ class TemplateApp(block: TemplateAppBuilder.() -> Unit = {}) {
             import(authModule)
             import(navigationModule)
             import(splashModule)
+            import(ordersModule)
         }
     }
 

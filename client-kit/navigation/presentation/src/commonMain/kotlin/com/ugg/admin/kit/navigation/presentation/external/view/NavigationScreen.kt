@@ -1,10 +1,12 @@
 package com.ugg.admin.kit.navigation.presentation.external.view
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -15,6 +17,10 @@ import com.ugg.admin.kit.auth.presentation.external.view.InitiateScreen
 import com.ugg.admin.kit.auth.presentation.external.view.OtpScreen
 import com.ugg.admin.kit.navigation.domain.external.contexts.NavigationContext
 import com.ugg.admin.kit.navigation.domain.external.entities.NavigationEvent
+import com.ugg.admin.kit.navigation.presentation.internal.view.MainTab
+import com.ugg.admin.kit.navigation.presentation.internal.view.MainTabsView
+import com.ugg.admin.kit.orders.domain.entities.OrdersFlow
+import com.ugg.admin.kit.orders.presentation.external.view.OrderDetailScreen
 import com.ugg.admin.kit.splash.domain.entities.SplashDestination
 import com.ugg.admin.kit.splash.domain.entities.SplashFlow
 import com.ugg.admin.kit.splash.presentation.external.view.SplashScreen
@@ -45,11 +51,13 @@ fun NavigationScreen() {
                 subclass(SplashFlow.Auth::class, SplashFlow.Auth.serializer())
                 subclass(SplashFlow.Launch::class, SplashFlow.Launch.serializer())
                 subclass(AuthFlow.Otp::class, AuthFlow.Otp.serializer())
+                subclass(OrdersFlow.Detail::class, OrdersFlow.Detail.serializer())
             }
         }
     }
 
     val backStack = rememberNavBackStack(config, SplashDestination.Splash)
+    var selectedTab by rememberSaveable { mutableStateOf(MainTab.Orders) }
 
     LaunchedEffect(Unit) {
         navigationContext.events.collect { event ->
@@ -73,7 +81,15 @@ fun NavigationScreen() {
                 InitiateScreen()
             }
             entry<SplashFlow.Launch> {
-                Text("Welcome! Replace with HomeScreen")
+                MainTabsView(
+                    selected = selectedTab,
+                    onSelect = { selectedTab = it },
+                    onOpenOrder = { navigationContext.tryNavigate(OrdersFlow.Detail(it)) },
+                )
+            }
+            entry<OrdersFlow.Detail> {
+                // TODO: «+ Добавить» фото — once the admin app uploads to Firebase Storage.
+                OrderDetailScreen(orderId = it.orderId, onBack = { navigationContext.back() })
             }
             entry<AuthFlow.Otp> {
                 OtpScreen(it.phone, it.sessionId)

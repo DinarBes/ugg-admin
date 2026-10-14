@@ -13,6 +13,8 @@ kotlin {
 
             implementation(projects.infrastructure.apiCore)
             implementation(projects.infrastructure.apiAuth)
+
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

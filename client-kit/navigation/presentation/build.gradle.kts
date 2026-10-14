@@ -18,6 +18,11 @@ kotlin {
             implementation(projects.clientKit.authDomain)
             implementation(projects.clientKit.authPresentation)
 
+            implementation(projects.clientKit.ordersDomain)
+            implementation(projects.clientKit.ordersPresentation)
+
+            implementation(projects.clientKit.corePresentation)
+
             implementation(libs.navigation3.ui)
         }
     }
