@@ -18,3 +18,8 @@ captures
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
 .worktrees/
+
+# Local AI tooling
+CLAUDE.md
+.claude/
+docs/superpowers/
